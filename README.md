@@ -1,2 +1,24 @@
-# HB_Web
-初步为nga的hb专楼自助查询系统的前端页面，其他功能若有需要，未来再添加
+# hb_web
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
