@@ -5,19 +5,30 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 // 2.创建路由对象
-const NGA = () =>import('../views/nga/NGA');
+const NGASearchMain = () =>import('../views/nga/NGASearchMain');
+const NGACommentsMain = () => import('../views/nga/NGACommentsMain');
+
 
 // 配置路由和组件之间的映射关系
 const routes = [
     {
         path: '',
-        redirect: './nga'
+        redirect: './nga_search'
     },
     {
-        path: '/nga',
-        component: NGA,
+        path: '/nga_search',
+        component: NGASearchMain,
         meta: {
-            title: 'NGA',
+            title: 'NGASearchMain',
+            needLogin: false,
+            index: 0
+        }
+    },
+    {
+        path: '/nga_comments',
+        component: NGACommentsMain,
+        meta: {
+            title: 'NGACommentsMain',
             needLogin: false,
             index: 0
         }
