@@ -1,7 +1,5 @@
 <template>
   <div id="nga_comments_main">
-<!--    <div id="nga_comments_bg">-->
-<!--    </div>-->
     <div id="nga_comments_page">
       <n-g-a-title-bar></n-g-a-title-bar>
       <n-g-a-comments-bar></n-g-a-comments-bar>

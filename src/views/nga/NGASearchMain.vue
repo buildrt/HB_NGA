@@ -1,7 +1,7 @@
 <template>
   <div id="nga_search_main">
-    <div id="nga_search_bg">
-    </div>
+<!--    <div id="nga_search_bg">-->
+<!--    </div>-->
     <div id="nga_search_page">
       <n-g-a-title-bar></n-g-a-title-bar>
       <n-g-a-search-bar></n-g-a-search-bar>
@@ -51,9 +51,12 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: -5;
     overflow-x: hidden;
     overflow-y: auto;
+    background-image: url("../../assets/img/nga/hb1.jpg");
+    background-size: 100%;
+    background-position: top center;
   }
   #nga_search_main::-webkit-scrollbar {
     display: none;

@@ -1,10 +1,11 @@
 import originAxios from 'axios'
+import {Message} from "element-ui";
 
 export default function axios(option) {
   return new Promise((resolve, reject) => {
     // 1.创建axios的实例
     const instance = originAxios.create({
-      baseURL: "http://localhost:8080",
+      // baseURL: "http://43.142.76.39:5000",
       timeout: 15000
     });
 
