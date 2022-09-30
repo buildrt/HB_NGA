@@ -1,7 +1,5 @@
 <template>
   <div id="nga_search_main">
-<!--    <div id="nga_search_bg">-->
-<!--    </div>-->
     <div id="nga_search_page">
       <n-g-a-title-bar></n-g-a-title-bar>
       <n-g-a-search-bar></n-g-a-search-bar>

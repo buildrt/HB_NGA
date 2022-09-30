@@ -16,8 +16,11 @@
 
     },
     created() {
-
-    }
+      // this.stopF5Refresh();
+      if (this.$router.path !== '/nga_search') {
+        this.$router.replace('/nga_search')
+      }
+    },
   }
 </script>
 

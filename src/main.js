@@ -15,6 +15,7 @@ Vue.config.productionTip = false
 Vue.use(Element);
 Vue.component(ExTableColumn.name, ExTableColumn);
 
+
 new Vue({
   el: "#app",
   router,

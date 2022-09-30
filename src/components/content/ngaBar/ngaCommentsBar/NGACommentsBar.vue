@@ -1,7 +1,7 @@
 <template>
   <div id="nga_comments_bar">
     <el-tabs>
-      <el-tab-pane :label="build + '号楼'" v-for="build in buildingList" :key="build">
+      <el-tab-pane :label="this.$store.getters.getBuildingValue + '号楼'">
         <n-g-a-comments-item
             :key="index"
             v-for="(item, index) in commentsList"
@@ -10,84 +10,70 @@
         </n-g-a-comments-item>
       </el-tab-pane>
     </el-tabs>
+    <!-- 分页 -->
+    <el-pagination
+        layout="prev, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange">
+    </el-pagination>
+    <el-backtop style="z-index: 10" target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
 </template>
 
 <script>
 import NGACommentsItem from "@/components/content/ngaBar/ngaCommentsItem/NGACommentsItem";
+import axios from "@/network/axios";
+import querystring from "querystring";
+
 export default {
   name: "NGACommentsBar",
   components: {NGACommentsItem},
   data() {
     return {
-      buildingList: [
-        11,
-        12,
-      ],
       commentsList: [
-        {
-          name: '輪廻転生RT',
-          uid: '2456789',
-          tag: 2,
-          floor: 67899,
-          like: 20,
-          date: '2022-09-25 11:20:00',
-          comments: "那两张我也有来着goodjob\n" +
-              "压力嘛，大家都是同好，偶尔跑出来的野怪也是没有合理逻辑无法动摇我的看法，压力槽不满很正常啦\n" +
-              "我使用辩论思维目标我\n" +
-              "野怪使用胡言乱语目标我受到反击(辩论思维) 野怪卒\n" +
-              "正主 使用 发糖 目标 全体\n" +
-              "我 压力-100\n" +
-              "差不多这么个流程嘲笑1\n" +
-              "\n" +
-              "https://nga.178.com/read.php?&tid=33284282&pid=641925100&to=1",
-        },
-        {
-          name: 'BuildRT',
-          uid: '12345678',
-          tag: 1,
-          floor: 4528,
-          like: 15,
-          date: '2022-09-15 12:20:00',
-          comments: "野怪使用胡言乱语目标我受到反击(辩论思维) 野怪卒\n" +
-              "高中那会儿是狂热五迷，最喜欢《仓颉》，然后还有《自传》和《后青春的诗》整张专辑，还有《星空》",
-        },
-        {
-          name: '己亥23333',
-          uid: '12345678',
-          tag: 1,
-          floor: 4528,
-          like: 15,
-          date: '2022-09-15 12:20:00',
-          comments: "野怪使用胡言乱语目标我受到反击(辩论思维) 野怪卒\n" +
-              "高中那会儿是狂热五迷，最喜欢《仓颉》，然后还有《自传》和《后青春的诗》整张专辑，还有《星空》",
-        },
-        {
-          name: '己亥23333',
-          uid: '12345678',
-          tag: 1,
-          floor: 4528,
-          like: 15,
-          date: '2022-09-15 12:20:00',
-          comments: "野怪使用胡言乱语目标我受到反击(辩论思维) 野怪卒\n" +
-              "高中那会儿是狂热五迷，最喜欢《仓颉》，然后还有《自传》和《后青春的诗》整张专辑，还有《星空》",
-        },
-        {
-          name: '己亥23333',
-          uid: '12345678',
-          tag: 1,
-          floor: 4528,
-          like: 15,
-          date: '2022-09-15 12:20:00',
-          comments: "野怪使用胡言乱语目标我受到反击(辩论思维) 野怪卒\n" +
-              "高中那会儿是狂热五迷，最喜欢《仓颉》，然后还有《自传》和《后青春的诗》整张专辑，还有《星空》",
-        }
-      ],
 
+      ],
+      building2: [],
+      obj: {
+        // 当前页
+        pageNum: 1,
+        // 页容量
+        pageSize: 20,
+      },
     }
   },
   methods: {
-
+    list(form) {
+      axios({
+        method:"post",
+        url:"/api/comment",
+        data:querystring.stringify(form)
+      }).then(res=>{
+        console.log(res.data)
+        let data = res.data;
+        if (data.length > 0) {
+          this.commentsList = res.data;
+        }
+      })
+    },
+    handleCurrentChange(val) {
+      console.log(val);
+      // 将val赋值当前页,页数改变重新请求
+      this.obj.pageNum = val;
+      let form = this.$store.getters.getFormValue;
+      form = Object.assign({}, form, this.obj)
+      console.log(form, "form");
+      this.list(form);
+      document.getElementById("nga_comments_bar").scrollIntoView({
+        behavior: "smooth"
+      });
+    },
+    // 页数改变,将val 赋值 给 pagesize
+    handleSizeChange(val) {
+      // console.log(val);
+      this.obj.pageSize = val;
+      // this.list(form);
+    },
   },
   computed: {
     style1() {
@@ -100,7 +86,14 @@ export default {
         backgroundColor: 'rgba(255,255,255,0.6)'
       }
     }
-  }
+  },
+  mounted() {
+    console.log("val");
+    this.building2 = this.$store.getters.getBuildingValue;
+    this.commentsList = this.$store.getters.getCommentsValue;
+    console.log(this.building2, "233")
+    console.log(this.commentsList, "233")
+  },
 }
 </script>
 
@@ -124,5 +117,18 @@ export default {
     left: 1%;
     font-size: 16px;
     background-color: rgba(255, 255, 255, 0.5);
+  }
+  .el-pagination {
+    position: relative;
+    margin-top: 30px;
+    width: 20%;
+    border: 1px solid black;
+    text-align: center;
+    left: 40%;
+  }
+  .el-backtop {
+    position: relative;
+    border: 1px solid black;
+    background-color: #ff5777;
   }
 </style>

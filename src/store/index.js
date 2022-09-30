@@ -9,7 +9,10 @@ import getters from './getters'
 Vue.use(Vuex);
 
 const state = {
-
+    buildingValue: [],
+    isTrue: false,
+    commentsValue: [],
+    formValue: [],
 };
 
 const store = new Vuex.Store({

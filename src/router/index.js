@@ -30,7 +30,7 @@ const routes = [
         meta: {
             title: 'NGACommentsMain',
             needLogin: false,
-            index: 0
+            index: 0,
         }
     }
 ];

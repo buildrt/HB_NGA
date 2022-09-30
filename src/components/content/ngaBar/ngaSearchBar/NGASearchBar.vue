@@ -2,9 +2,13 @@
   <div id="ngaSearchBar">
     <el-form :inline="true" :label-position="left" label-width="100px" :rules="rules" ref="ngaSearchForm" :model="ngaSearchForm">
       <el-form-item label="楼号" prop="no">
-        <el-checkbox-group id="floor_checkbox" v-model="ngaSearchForm.no">
-          <el-checkbox :label="item.label" v-for="(item, index) in actionsMap.no" :value="item.no" :key="index"></el-checkbox>
-        </el-checkbox-group>
+        <el-radio
+            v-model="ngaSearchForm.no"
+            id="floor_radio"
+            :label="item.no"
+            v-for="(item, index) in actionsMap.no"
+            :key="index"
+        >{{item.label}}</el-radio>
       </el-form-item>
       <el-form-item label="关键词">
         <el-input v-model="ngaSearchForm.fuzzy_key" placeholder="请输入关键词"></el-input>
@@ -21,8 +25,8 @@
       <el-form-item label="评论类型">
         <el-select v-model="ngaSearchForm.tag" placeholder="选择类型">
           <el-option
-              v-for="item in actionsMap.tag"
-              :key = "item.value"
+              v-for="(item, index) in actionsMap.tag"
+              :key = "index"
               :label = "item.name"
               :value = "item.value"
           ></el-option>
@@ -36,8 +40,8 @@
             popper-class="popperClass"
             type="datetime"
             style="width: 200px"
-            format="yyyy-MM-dd HH:mm"
-            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
@@ -48,8 +52,8 @@
             popper-class="popperClass"
             type="datetime"
             style="width: 200px"
-            format="yyyy-MM-dd HH:mm"
-            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
@@ -88,11 +92,21 @@ import * as querystring from "querystring";
 export default {
   name: "NGASearchBar",
   data () {
+    var checkNo = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('楼号不能为空'));
+      } else {
+        if (this.ngaSearchForm.no !== '') {
+          this.$refs.ngaSearchForm.validateField('no');
+        }
+        callback();
+      }
+    }
     return {
       // 表单
       ngaSearchForm: {
         // 楼号
-        no: [],
+        no: 13,
         // 用户uid
         uid: '',
         // 用户名
@@ -106,7 +120,7 @@ export default {
         // 结束日期
         endDate: '',
         // 排序标准
-        orderBy: "`floor`",
+        orderBy: "floor",
         // 排序
         order: 2,
         // 仅获取json类型
@@ -116,7 +130,7 @@ export default {
       // 校验规则
       rules: {
         no: [
-          {required: true, message: '楼号不能为空', trigger: 'blur'},
+          {validator: checkNo, trigger: 'blur'},
         ],
         floor: [
           {type: 'number', message: '楼层只能输入数字', trigger: 'blur'},
@@ -147,19 +161,19 @@ export default {
         orderBy: [
           {
             name: '用户uid',
-            value: "`uid`"
+            value: "uid"
           },
           {
             name: '用户名',
-            value: "`name`"
+            value: "name"
           },
           {
             name: '楼层',
-            value: "`floor`"
+            value: "floor"
           },
           {
             name: '赞数',
-            value: "`like`"
+            value: "like"
           },
           {
             name: '日期',
@@ -178,33 +192,13 @@ export default {
           },
         ],
       },
-      form: {
-        no: 6,
-        // 用户uid
-        uid: '',
-        // 用户名
-        name: '',
-        // 楼层
-        floor: '',
-        // 评论类型
-        tag: '',
-        // 开始日期
-        startDate: '',
-        // 结束日期
-        endDate: '',
-        // 排序标准
-        orderBy: "floor",
-        // 排序
-        order: 2,
-        // 仅获取json类型
-        type: 2,
-        fuzzy_key: ''
-      },
       page: {
         pageNum: 1,
         pageSize: 20,
         hasMore: true
       },
+      searchComments: [],
+      building: [],
     };
   },
   methods: {
@@ -217,27 +211,15 @@ export default {
         this.showSheet = true
       })
     },
-    loadMore(){
-      this.page.pageNum += 1
-      this.load().then(data => {
-        this.list = this.list.concat(data)
-        // 处理分页数据
-        if(data.length > 0){
-          if(data.length < this.page.pageSize){
-            this.page.hasMore = false
-          }
-        }
-      }).catch(e => {
-        console.log(e)
-      })
-    },
-    submit() {
-
-    },
     load() {
       // this.$router.push('nga_comments');
+      console.log("no:")
+      console.log(this.ngaSearchForm.no);
       let form = JSON.parse(JSON.stringify(this.ngaSearchForm))
+      this.$store.commit('setFormValue', form);
       form = Object.assign({}, form, this.page)
+      this.building = this.ngaSearchForm.no;
+      this.$store.commit('setBuildingValue', this.building)
       console.log(form);
       axios({
         method:"post",
@@ -245,14 +227,15 @@ export default {
         data:querystring.stringify(form)
       }).then(res=>{
         console.log(res.data)
+        this.searchComments = res.data;
+        this.$store.commit('setCommentsValue', this.searchComments)
+        setTimeout(() => {
+          this.$router.replace('/nga_comments');
+        },1000);
       })
     },
     sheetSelect(e) {
-      this.form[this.actionsKey] = e.value
-      /* if(this.actionsKey == 'no'){
-        this.form.startDate = e.startDatetime
-        this.form.endDate = e.endDatetime
-      } */
+      this.ngaSearchForm[this.actionsKey] = e.value
     },
     buildingList() {
       axios({
@@ -262,13 +245,12 @@ export default {
         console.log(res);
         let list = [];
         let resData = res.data
+        console.log("resData", resData);
         for(let i = resData.length - 1; i >= 0; i--){
           let item = resData[i]
-          item['value'] = item['no']
-          item['name'] = item['label']
           list.push(item)
         }
-        console.log(list);
+        console.log("list", list);
         this.actionsMap.no = list
       })
     }
@@ -341,7 +323,7 @@ export default {
   padding-top: 15px;
   font-weight: bold;
 }
-#floor_checkbox {
+#floor_radio {
   position: relative;
   left: 30px;
 }

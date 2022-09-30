@@ -21,7 +21,7 @@
       </div>
     <div id="comments_content">
       <div style="position: relative; top: 0; height: 20px;"></div>
-      <span id="contentSpan" v-html="getComments(item.comments)"></span>
+      <span id="contentSpan" v-html="getComments(item.content)"></span>
       <div style="position: relative; top: 0; height: 20px;"></div>
     </div>
     <div id="comments_foot">
@@ -32,7 +32,7 @@
           </td>
           <td></td>
           <td width="60%">
-            <span style="font-size: 13px;position: absolute; right: 10px;">{{item.date}}</span>
+            <span style="font-size: 13px;position: absolute; right: 10px;">{{item.postdate}}</span>
           </td>
         </tr>
       </table>
@@ -57,8 +57,8 @@ export default {
       try{
         if (comments) {
           // 替换nga图片域名
-          comments = comments.replace(/https:\/\/img4.nga.178.com/g, '/ngaimg4')
-          comments = comments.replace(/https:\/\/img.nga.178.com/g, '/ngaimg')
+          // comments = comments.replace(/https:\/\/img4.nga.178.com/g, '/ngaimg4')
+          // comments = comments.replace(/https:\/\/img.nga.178.com/g, '/ngaimg')
           // 提取超链接
           let regexp = /\[(.*?)]/g;
           let array = comments.matchAll(regexp);
