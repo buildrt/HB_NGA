@@ -9,7 +9,7 @@ module.exports = {
         changeOrigin: true,
       },
       '/test': {
-        target: 'https://43.142.76.39:5050/',
+        target: 'https://www.4ha.club:5050/',
         changeOrigin: true,
       }
     },
