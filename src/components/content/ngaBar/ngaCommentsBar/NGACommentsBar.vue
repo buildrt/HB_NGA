@@ -23,7 +23,7 @@
 <script>
 import NGACommentsItem from "@/components/content/ngaBar/ngaCommentsItem/NGACommentsItem";
 import querystring from "querystring";
-import axios from "axios";
+import axios from "@/network/axios";
 
 export default {
   name: "NGACommentsBar",

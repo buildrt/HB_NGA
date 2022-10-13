@@ -89,7 +89,8 @@
 <script>
 // import axios from "@/network/axios";
 import * as querystring from "querystring";
-import axios from "axios";
+import axios from "@/network/axios";
+
 
 export default {
   name: "NGASearchBar",
@@ -222,7 +223,7 @@ export default {
       }).then(res=>{
         console.log("res.data1:")
         console.log(res.data)
-        this.searchComments = res.data.data;
+        this.searchComments = res.data;
         this.$store.commit('setCommentsValue', this.searchComments)
         setTimeout(() => {
           this.$router.replace('/nga_comments');
@@ -240,9 +241,9 @@ export default {
         console.log(res);
         let list = [];
         let resData = res.data
-        console.log("resData", resData.data);
-        for(let i = resData.data.length - 1; i >= 0; i--){
-          let item = resData.data[i]
+        console.log("resData", resData);
+        for(let i = resData.length - 1; i >= 0; i--){
+          let item = resData[i]
           list.push(item)
         }
         console.log("list", list);
