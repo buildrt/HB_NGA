@@ -11,7 +11,7 @@
               <span style="margin-left: 10px; font-size: 13px;">uid: {{item.uid}}</span>
             </td>
             <td width="15%">
-              <el-tag effect="dark" type="success" v-if="item.tag === 2">同传</el-tag>
+              <el-tag effect="dark" type="success" v-if="item.tag === 3">同传</el-tag>
             </td>
             <td>
               <span style="position:absolute;right: 10px;font-size: 14px;">#{{item.floor}}</span>

@@ -10,8 +10,9 @@
             :key="index"
         >{{item.label}}</el-radio>
       </el-form-item>
+      <br>
       <el-form-item label="关键词">
-        <el-input v-model="ngaSearchForm.fuzzy_key" placeholder="请输入关键词"></el-input>
+        <el-input v-model="ngaSearchForm.fuzzyKey" placeholder="请输入关键词"></el-input>
       </el-form-item>
       <el-form-item label="用户uid">
         <el-input v-model="ngaSearchForm.uid" placeholder="请输入用户uid"></el-input>
@@ -86,8 +87,9 @@
 </template>
 
 <script>
-import axios from "@/network/axios";
+// import axios from "@/network/axios";
 import * as querystring from "querystring";
+import axios from "axios";
 
 export default {
   name: "NGASearchBar",
@@ -125,7 +127,7 @@ export default {
         order: 2,
         // 仅获取json类型
         type: 2,
-        fuzzy_key: ''
+        fuzzyKey: ''
       },
       // 校验规则
       rules: {
@@ -171,14 +173,6 @@ export default {
             name: '楼层',
             value: "floor"
           },
-          {
-            name: '赞数',
-            value: "like"
-          },
-          {
-            name: '日期',
-            value: "`date`"
-          },
         ],
         // 排序方式集合
         order: [
@@ -223,11 +217,12 @@ export default {
       console.log(form);
       axios({
         method:"post",
-        url:"/api/comment",
+        url:"/test/comment",
         data:querystring.stringify(form)
       }).then(res=>{
+        console.log("res.data1:")
         console.log(res.data)
-        this.searchComments = res.data;
+        this.searchComments = res.data.data;
         this.$store.commit('setCommentsValue', this.searchComments)
         setTimeout(() => {
           this.$router.replace('/nga_comments');
@@ -240,14 +235,14 @@ export default {
     buildingList() {
       axios({
         method: 'get',
-        url: '/api/list'
+        url: '/test/list'
       }).then(res => {
         console.log(res);
         let list = [];
         let resData = res.data
-        console.log("resData", resData);
-        for(let i = resData.length - 1; i >= 0; i--){
-          let item = resData[i]
+        console.log("resData", resData.data);
+        for(let i = resData.data.length - 1; i >= 0; i--){
+          let item = resData.data[i]
           list.push(item)
         }
         console.log("list", list);

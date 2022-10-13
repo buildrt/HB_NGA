@@ -19,25 +19,27 @@ const routes = [
         path: '/nga_search',
         component: NGASearchMain,
         meta: {
-            title: 'NGASearchMain',
-            needLogin: false,
-            index: 0
+            title: 'HB专楼爬楼器',
         }
     },
     {
         path: '/nga_comments',
         component: NGACommentsMain,
         meta: {
-            title: 'NGACommentsMain',
-            needLogin: false,
-            index: 0,
+            title: 'HB专楼爬楼器',
         }
     }
 ];
 
 const router = new Router({
-    routes
+    routes,
+    mode: 'hash'
 });
+
+router.beforeEach((to, from, next) => {
+    document.title = to.matched[0].meta.title;
+    next();
+})
 
 // 3.将router对象传入到Vue实例
 export default router

@@ -22,8 +22,8 @@
 
 <script>
 import NGACommentsItem from "@/components/content/ngaBar/ngaCommentsItem/NGACommentsItem";
-import axios from "@/network/axios";
 import querystring from "querystring";
+import axios from "axios";
 
 export default {
   name: "NGACommentsBar",
@@ -46,9 +46,10 @@ export default {
     list(form) {
       axios({
         method:"post",
-        url:"/api/comment",
+        url:"/test/comment",
         data:querystring.stringify(form)
       }).then(res=>{
+        console.log("res.data:");
         console.log(res.data)
         let data = res.data;
         if (data.length > 0) {
@@ -96,7 +97,27 @@ export default {
   },
 }
 </script>
-
+<style>
+.el-pagination .btn-prev {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  font-size: 30px;
+  margin-right: 20px;
+}
+.el-pagination .btn-next {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  margin-left: 20px;
+}
+.el-pagination .btn-next .el-icon {
+  font-size: 25px;
+}
+.el-pagination .btn-prev .el-icon {
+  font-size: 25px;
+}
+</style>
 <style scoped>
   #nga_comments_bar {
     position: absolute;
@@ -121,14 +142,11 @@ export default {
   .el-pagination {
     position: relative;
     margin-top: 30px;
-    width: 20%;
-    border: 1px solid black;
+    width: 50%;
+    height: 100px;
+    /*border: 1px solid black;*/
     text-align: center;
-    left: 40%;
+    left: 25%;
   }
-  .el-backtop {
-    position: relative;
-    border: 1px solid black;
-    background-color: #ff5777;
-  }
+
 </style>
